@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   appVersion: require('../../package.json').version + '-dev',
+  API_URL: 'http://localhost/ci_api',
 };
 
 /*

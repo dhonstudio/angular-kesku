@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -11,11 +12,17 @@ export class IndexComponent implements OnInit {
   isLoading = false
   shortName = 'MR'
   socialUser = {
-    name: "Muhammd Ramadhon"
+    name: ""
   }
   tabIndex = 0
 
-  constructor() { }
+  constructor(
+    private userService: UserService,
+  ) { 
+    this.userService.checkUser('doon13@gmail.com').then(data => {
+      if (data.length > 0) this.socialUser.name = data[0].fullName
+    })
+  }
 
   ngOnInit(): void {
   }
