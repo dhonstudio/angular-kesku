@@ -1,1 +1,30 @@
-<p>index works!</p>
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<div *ngIf="!isLoading">
+  <mat-toolbar>
+    <span>KESKU v.{{currentVersion}}</span>
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      {{shortName}}
+    </button>
+    <mat-menu #menu="matMenu">
+      <text mat-menu-item>
+        <mat-icon>face</mat-icon>
+        <span>{{socialUser.name}}</span>
+      </text>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+  <div class="mb-2">
+    <button mat-raised-button (click)="addTransaction()" color="primary" class="mx-3 mt-2">
+      Add Transaction
+    </button>
+  </div>
+  <mat-tab-group mat-align-tabs="start" [selectedIndex]="tabIndex" (selectedTabChange)="resetFilter($event)">
+    <mat-tab label="Dashboard"></mat-tab>
+    <mat-tab label="Transaction"></mat-tab>
+    <mat-tab label="Spending"></mat-tab>
+  </mat-tab-group>
+</div>
