@@ -36,7 +36,8 @@ export class IndexComponent implements OnInit {
   }
 
   logout() {
-
+    this.cookieService.delete('DSaAs13S', '/')
+    window.location.href = environment.redirect_auth
   }
 
   addTransaction() {

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --watch --configuration production --base-href=",
     "watch": "ng build --watch --configuration development --base-href=/ci_dhonstudio/angular/kesku/ --output-path C:/xampp/htdocs/ci_dhonstudio/angular/kesku",
     "test": "ng test"
   },
