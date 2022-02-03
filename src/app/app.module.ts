@@ -25,9 +25,6 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     HttpClientModule,
 
-    //bootstrap
-    NgbModule,
-
     //angular-material
     MatProgressBarModule,
     MatToolbarModule,
@@ -35,6 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     MatTabsModule,
     MatButtonModule,
+
+    //ng-bootstrap
     NgbModule,
   ],
   providers: [],
