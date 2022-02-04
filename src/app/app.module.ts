@@ -11,21 +11,29 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { secret } from 'src/environments/secret';
+import { AddAccountComponent } from './components/add-account/add-account.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     IndexComponent,
+    AddAccountComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ReactiveFormsModule,
 
     //social-login
     SocialLoginModule,
@@ -37,11 +45,19 @@ import { secret } from 'src/environments/secret';
     MatIconModule,
     MatTabsModule,
     MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSnackBarModule,
 
     //ng-bootstrap
     NgbModule,
   ],
   providers: [
+    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {
+      appearance: 'fill',
+      floatLabel: 'none'
+    }},
     {provide: 'SocialAuthServiceConfig', useValue: {
       autoLogin: true,
       providers: [

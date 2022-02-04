@@ -18,7 +18,10 @@
     </mat-menu>
   </mat-toolbar>
   <div class="mb-2">
-    <button mat-raised-button (click)="addTransaction()" color="primary" class="mx-3 mt-2">
+    <button mat-raised-button (click)="addAccount()" color="accent" class="mx-3 mt-2">
+      Add Account
+    </button>
+    <button mat-raised-button (click)="addTransaction()" color="primary" class="mx-1 mt-2">
       Add Transaction
     </button>
   </div>
@@ -26,5 +29,6 @@
     <mat-tab label="Dashboard"></mat-tab>
     <mat-tab label="Transaction"></mat-tab>
     <mat-tab label="Spending"></mat-tab>
+    <mat-tab label="Accounts"></mat-tab>
   </mat-tab-group>
 </div>
