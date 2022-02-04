@@ -13,6 +13,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import { secret } from 'src/environments/secret';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     HttpClientModule,
 
+    //social-login
+    SocialLoginModule,
+
     //angular-material
     MatProgressBarModule,
     MatToolbarModule,
@@ -36,7 +41,26 @@ import { HttpClientModule } from '@angular/common/http';
     //ng-bootstrap
     NgbModule,
   ],
-  providers: [],
+  providers: [
+    {provide: 'SocialAuthServiceConfig', useValue: {
+      autoLogin: true,
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider(
+            /*
+            | -------------------------------------------------------------------
+            |  Create file secret.ts and secret.prod.ts in environments folder fill this code:
+            |  export const secret = {
+            |    googleClientId : 'your-client-id.apps.googleusercontent.com'
+            |  };
+            */
+            secret.googleClientId
+          )
+        }
+      ]
+    } as SocialAuthServiceConfig},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
