@@ -15,18 +15,23 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { secret } from 'src/environments/secret';
 import { AddAccountComponent } from './components/add-account/add-account.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AccountsComponent } from './components/accounts/accounts.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     IndexComponent,
     AddAccountComponent,
+    AccountsComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +54,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
 
     //ng-bootstrap
     NgbModule,

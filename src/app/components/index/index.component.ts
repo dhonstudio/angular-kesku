@@ -6,7 +6,7 @@ import * as CryptoJS from 'crypto-js';
 import { SocialAuthService } from 'angularx-social-login';
 import { MatDialog } from '@angular/material/dialog';
 import { AddAccountComponent } from '../add-account/add-account.component';
-import { Akun } from 'src/app/models/kesku.model';
+import { Akun, All } from 'src/app/models/kesku.model';
 import { KeskuService } from 'src/app/services/kesku.service';
 import { GlobalService } from 'src/app/services/angular_services/global.service';
 
@@ -17,13 +17,14 @@ import { GlobalService } from 'src/app/services/angular_services/global.service'
 })
 export class IndexComponent implements OnInit {
   currentVersion = environment.appVersion
-  isLoading = false
+  isLoading = true
   shortName = 'MR'
   socialUser = {
     name: ""
   }
   userId!: number
   tabIndex = 0
+  data!: All
 
   constructor(
     private _userService: UserService,
@@ -42,7 +43,7 @@ export class IndexComponent implements OnInit {
     } else {
       this._socialAuthService.authState.subscribe(user => {
         this._userService.checkUser('project', 'user_ci', {username:'admin', password:'admin'}, user.email, 'email').then(data => {
-          if (data.length > 0) this.socialUser.name = data[0].fullName
+          if (data.length > 0) this.userId = data[0].id
           this.initUser()
         })
       })
@@ -55,7 +56,17 @@ export class IndexComponent implements OnInit {
   initUser() {
     this._userService.checkUser('project', 'user_ci', {username:'admin', password:'admin'}, `${this.userId}`, 'id').then(data => {
       if (data.length > 0) this.socialUser.name = data[0].fullName
-    })
+      this.initData()
+    })    
+  }
+
+  initData() {
+    this._keskuService.initAccounts(this.userId).then(result => {
+      this.data = {
+        akun: result
+      }
+      this.isLoading = false
+    })   
   }
 
   logout() {
@@ -87,7 +98,7 @@ export class IndexComponent implements OnInit {
 
   private sendApiAddAccount(akun: Akun) {
     akun.id_book = this.userId
-    this._keskuService.checkAccount(akun).then(ok => {
+    this._keskuService.checkAccountName(akun).then(ok => {
       if (ok) {
         this._keskuService.addAccount(akun).then(data => {
           console.log(data)
@@ -95,6 +106,7 @@ export class IndexComponent implements OnInit {
       } else {
         this._globalService.showSnackBar('Failed, account duplicate', 3000)
       }
+      this.tabIndex = 3;
     })
     //
       // if (data) {
