@@ -19,8 +19,8 @@ export class AddAccountComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
     this.createForm()
-    if (data.akun) {
-      this.akunNames = data.akun.map((x: { akunName: string }) => x.akunName)
+    if (data.akuns) {
+      this.akunNames = data.akuns.map((x: { akunName: string }) => x.akunName)
     }
   }
 
@@ -31,11 +31,11 @@ export class AddAccountComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       akunName: this.akunName,
       akunType: this.akunType,
-    });
+    })
   }
 
   saveAccount() {
-    this.matDialogRef.close(this.formGroup.value);    
+    this.matDialogRef.close(this.formGroup.value)
   }
 
   invalid() {

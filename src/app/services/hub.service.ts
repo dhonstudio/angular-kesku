@@ -9,6 +9,8 @@ export class HubService {
   sendDataSubs!: Subscription
   addAccountEmitter = new EventEmitter()
   addAccountSubs!: Subscription
+  addTransactionEmitter = new EventEmitter()
+  addTransactionSubs!: Subscription
 
   constructor() { }
 
@@ -18,5 +20,9 @@ export class HubService {
 
   addAccount() {
     this.addAccountEmitter.emit()
+  }
+
+  addTransaction() {
+    this.addTransactionEmitter.emit()
   }
 }

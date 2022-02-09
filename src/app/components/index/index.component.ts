@@ -59,12 +59,15 @@ export class IndexComponent implements OnInit {
   }
 
   initData() {
-    this.keskuService.initAccounts(this.userId).then(result => {
-      this.data = {
-        userId: this.userId,
-        akun: result
-      }
-      this.isLoading = false
+    this.keskuService.initAccounts(this.userId).then(akun => {
+      this.keskuService.initTransactions(this.userId).then(trx => {
+        this.data = {
+          userId: this.userId,
+          akun: akun,
+          trx: trx
+        }
+        this.isLoading = false
+      })
     })   
   }
 
@@ -78,18 +81,16 @@ export class IndexComponent implements OnInit {
     this.hubService.addAccount()
   }
 
+  addTransaction() {
+    this.hubService.addTransaction()
+  }
+
   changeTab(event: number) {
     this.tabIndex = event
   }
 
-  
-
-  addTransaction() {
-
-  }
-
-  resetFilter(event: any) {
-
+  resetTab(value: any) {
+    this.tabIndex = value.index;
   }
 
 }

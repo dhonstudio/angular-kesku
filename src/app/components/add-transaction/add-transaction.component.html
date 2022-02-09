@@ -1,0 +1,71 @@
+<h1 mat-dialog-title>Add Transaction</h1>
+<mat-dialog-content>
+  <form class="dynamic-form" [formGroup]="formGroup">
+		<mat-form-field>
+			<mat-label>Account Name</mat-label>
+			<input matInput 
+				[matAutocomplete]="auto" 
+				placeholder="Ex. Kas" formControlName="akunName" required>
+			<button *ngIf="akunName.value" matSuffix mat-icon-button aria-label="Clear" (click)="akunName.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+			<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+				<mat-option *ngFor="let option of filteredAkunName | async" [value]="option">
+				  {{option}}
+				</mat-option>
+			</mat-autocomplete>
+			<mat-hint class="error" align="start" *ngIf="formGroup.value.akunName && akunMinusOutcomes && !akunMinusOutcomes.includes(formGroup.value.akunName)">
+				Account Name not found
+			</mat-hint>
+		</mat-form-field>
+
+		<mat-radio-group aria-label="Select an option" formControlName="method" required>
+			<mat-radio-button value="1">Increase</mat-radio-button>
+			<mat-radio-button value="2">Decrease</mat-radio-button>
+		</mat-radio-group>
+
+		<mat-form-field>
+			<mat-label>Amount</mat-label>
+			<input matInput placeholder="Ex. 10000" formControlName="amount" type="number" required>
+			<button *ngIf="amount.value" matSuffix mat-icon-button aria-label="Clear" (click)="amount.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>To Name</mat-label>
+			<input matInput 
+				[matAutocomplete]="autoToName" placeholder="Ex. Kas" formControlName="toName">
+			<button *ngIf="toName.value" matSuffix mat-icon-button aria-label="Clear" (click)="toName.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+			<mat-autocomplete autoActiveFirstOption #autoToName="matAutocomplete">
+				<mat-option *ngFor="let option of filteredToName | async" [value]="option">
+				  {{option}}
+				</mat-option>
+			</mat-autocomplete>
+			<mat-hint class="error" align="start" *ngIf="formGroup.value.toName && akunNames && !akunNames.includes(formGroup.value.toName)">
+				Account Name not found
+			</mat-hint>
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Note</mat-label>
+			<input matInput
+				maxlength="500"
+				placeholder="Ex. It makes me feel..." formControlName="note">
+			<button *ngIf="note.value" matSuffix mat-icon-button aria-label="Clear" (click)="note.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+			<mat-hint align="end">{{note.value?.length || 0}}/500</mat-hint>
+		</mat-form-field>
+	</form>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button mat-dialog-close>Cancel</button>
+	<button mat-flat-button color="primary"
+			(click)="saveTransaction()"
+			[disabled]="invalid()">
+		Save
+	</button>
+</mat-dialog-actions>

@@ -15,10 +15,11 @@ export class DashboardComponent implements OnInit, OnChanges {
   banks!: Akun[]
   fintechs!: Akun[]
   emoneys!: Akun[]
+  outcomes!: Akun[]
   @Input() data!: All
 
   constructor(
-    private hubService: HubService
+    private hubService: HubService,
   ) { }
 
   ngOnInit(): void {
@@ -37,7 +38,8 @@ export class DashboardComponent implements OnInit, OnChanges {
   private receiveData(data: Akun[]) {
     this.data = {
       userId: this.data.userId,
-      akun: data
+      akun: data,
+      trx: this.data.trx
     }
 
     this.ngOnChanges()
@@ -52,6 +54,7 @@ export class DashboardComponent implements OnInit, OnChanges {
       this.banks = []
       this.fintechs = []
       this.emoneys = []
+      this.outcomes = []
 
       let akunTypes = this.akuns.map(x => x.akunType)
       akunTypes.forEach((element, key) => {
@@ -59,12 +62,13 @@ export class DashboardComponent implements OnInit, OnChanges {
         if (element == 2) this.banks.push(this.akuns[key])
         if (element == 3) this.fintechs.push(this.akuns[key])
         if (element == 4) this.emoneys.push(this.akuns[key])
+        if (element == 5) this.outcomes.push(this.akuns[key])
       })
 
       this.isLoaded = true
+    } else {
+      this.isLoaded = true
     }
   }
-
-
 
 }

@@ -1,0 +1,59 @@
+<div class="container-fluid">
+
+  <mat-form-field appearance="standard">
+    <mat-label>Filter</mat-label>
+    <input type="search" matInput placeholder="Ex. Kas" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="stamp" matSortDirection="desc">
+  
+      <ng-container matColumnDef="stamp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.stamp * 1000 | date:'medium'}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="akunName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Name </th>
+        <td mat-cell *matCellDef="let element">
+          <b>{{element.akunName}}</b> 
+          <text *ngIf="element.toName"> to <b>{{element.toName}}</b></text>
+          <text class="secondary-text" *ngIf="element.note"><br>note: {{element.note}}</text>
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+        <td mat-cell *matCellDef="let element">
+          <text [ngClass]="{'mat-column-negative': element.debit < 0}"> {{element.debit | currency:'IDR '}} </text>
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element; index as i">
+          <button mat-mini-fab color="primary" aria-label="Edit" class="mr-2">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-mini-fab color="warn" (click)="deleteTransaction(i, element)" aria-label="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                  [pageSize]="10"
+                  showFirstLastButtons 
+                  aria-label="Select page of transaction elements">
+    </mat-paginator>
+  </div>
+  
+</div>

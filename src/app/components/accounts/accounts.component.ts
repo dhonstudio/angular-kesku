@@ -32,13 +32,6 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
     private matDialog: MatDialog,
   ) { }
 
-  ngAfterViewInit(): void {
-    if (this.dataSource) {
-      this.dataSource.paginator = this.paginator
-      this.dataSource.sort = this.sort
-    }
-  }
-
   ngOnInit(): void {
     if (this.hubService.addAccountSubs == undefined) {    
       this.hubService.addAccountSubs = this.hubService.    
@@ -50,7 +43,14 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.initData()
-  }  
+  }
+
+  ngAfterViewInit(): void {
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator
+      this.dataSource.sort = this.sort
+    }
+  }
 
   private initData() {
     this.akuns = []
@@ -63,8 +63,8 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  initAkunTypeName(akun: Akun) {
-    return akun.akunType == 1 ? 'Cash' : akun.akunType == 2 ? 'Bank' : akun.akunType == 3 ? 'Fintech' : 'Emoney'
+  private initAkunTypeName(akun: Akun) {
+    return akun.akunType == 1 ? 'Cash' : akun.akunType == 2 ? 'Bank' : akun.akunType == 3 ? 'Fintech' : akun.akunType == 4 ? 'Emoney' : 'Outcome'
   }
 
   private initializeDataSource() {
@@ -82,7 +82,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
   private showaddAccountDialog() {
     const DialogRef = this.matDialog.open(AddAccountComponent, {
       data: {
-        akun: this.akuns
+        akuns: this.akuns
       }
     })
 

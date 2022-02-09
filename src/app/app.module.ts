@@ -19,6 +19,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatRadioModule } from '@angular/material/radio';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
@@ -27,6 +29,8 @@ import { AddAccountComponent } from './components/add-account/add-account.compon
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AddTransactionComponent } from './components/add-transaction/add-transaction.component';
+import { TransactionsComponent } from './components/transactions/transactions.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +39,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     AddAccountComponent,
     AccountsComponent,
     DashboardComponent,
+    AddTransactionComponent,
+    TransactionsComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +66,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     MatSortModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatAutocompleteModule,
+    MatRadioModule,
 
     //ng-bootstrap
     NgbModule,
