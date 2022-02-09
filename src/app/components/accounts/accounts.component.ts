@@ -58,7 +58,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
       this.akuns = this.data.akun
       this.akuns.forEach((element, key) => {
         this.akuns[key].akunTypeName = this.initAkunTypeName(element)
-      });
+      })
       this.initializeDataSource()
     }
   }
@@ -110,6 +110,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.akuns.length > 1) this.table.renderRows()
     this.initializeDataSource()
     this.ngAfterViewInit()
+    this.hubService.sendData(this.akuns)
   }
 
   async deleteAccount(index: number, akun: Akun) {
@@ -135,6 +136,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
 
   private sendApiDeleteAccount(akun: Akun) {
     this.keskuService.deleteAccount(akun.id_akun)
+    this.hubService.sendData(this.akuns)
   }
 
 }

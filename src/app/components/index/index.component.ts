@@ -4,11 +4,8 @@ import { UserService } from 'src/app/services/angular_services/user.service';
 import { environment } from 'src/environments/environment';
 import * as CryptoJS from 'crypto-js';
 import { SocialAuthService } from 'angularx-social-login';
-import { MatDialog } from '@angular/material/dialog';
-import { AddAccountComponent } from '../add-account/add-account.component';
-import { Akun, All } from 'src/app/models/kesku.model';
+import { All } from 'src/app/models/kesku.model';
 import { KeskuService } from 'src/app/services/kesku.service';
-import { GlobalService } from 'src/app/services/angular_services/global.service';
 import { HubService } from 'src/app/services/hub.service';
 
 @Component({
@@ -52,12 +49,6 @@ export class IndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.hubService.reloadDataSubs == undefined) {    
-      this.hubService.reloadDataSubs = this.hubService.    
-      reloadDataEmitter.subscribe(() => {    
-        this.initData() 
-      })    
-    }
   }
 
   initUser() {

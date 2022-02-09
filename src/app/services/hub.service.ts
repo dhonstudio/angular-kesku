@@ -5,18 +5,18 @@ import { Subscription } from 'rxjs';
   providedIn: 'root'
 })
 export class HubService {
-  reloadDataEmitter = new EventEmitter();
-  reloadDataSubs!: Subscription;
-  addAccountEmitter = new EventEmitter();
-  addAccountSubs!: Subscription;
+  sendDataEmitter = new EventEmitter()
+  sendDataSubs!: Subscription
+  addAccountEmitter = new EventEmitter()
+  addAccountSubs!: Subscription
 
   constructor() { }
 
-  reloadData() {
-    this.reloadDataEmitter.emit();
+  sendData(data: any) {
+    this.sendDataEmitter.emit(data)
   }
 
   addAccount() {
-    this.addAccountEmitter.emit();
+    this.addAccountEmitter.emit()
   }
 }
