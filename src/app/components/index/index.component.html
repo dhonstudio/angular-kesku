@@ -26,7 +26,7 @@
     </button>
   </div>
   <mat-tab-group mat-align-tabs="start" [selectedIndex]="tabIndex" (selectedTabChange)="resetFilter($event)">
-    <mat-tab label="Dashboard"></mat-tab>
+    <mat-tab label="Dashboard"><app-dashboard [data]="data"></app-dashboard></mat-tab>
     <mat-tab label="Transaction"></mat-tab>
     <mat-tab label="Spending"></mat-tab>
     <mat-tab label="Accounts"><app-accounts [data]="data" (changeTab)="changeTab($event)"></app-accounts></mat-tab>

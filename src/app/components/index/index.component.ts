@@ -24,7 +24,7 @@ export class IndexComponent implements OnInit {
     name: ""
   }
   private userId!: number
-  tabIndex = 3
+  tabIndex = 0
   data!: All
 
   constructor(

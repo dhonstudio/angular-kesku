@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+  }
+  
+  td, th {
+    width: 25%;
+  }
+  
+  .mat-header-cell {
+    font-size: 16px;
+    color: black;
+  }
+  
+  .mat-column-amount {
+    text-align: right;
+  }
+  
+  .text-as-link {
+    cursor: pointer;
+    color: darkcyan;
+  }
+  
+  .mat-column-negative {
+    color: red;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }
