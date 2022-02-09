@@ -33,8 +33,10 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
   ) { }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator
-    this.dataSource.sort = this.sort
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator
+      this.dataSource.sort = this.sort
+    }
   }
 
   ngOnInit(): void {
@@ -51,10 +53,18 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
   }  
 
   private initData() {
+    this.akuns = []
     if (this.data && this.data.akun.length > 0) {
       this.akuns = this.data.akun
+      this.akuns.forEach((element, key) => {
+        this.akuns[key].akunTypeName = this.initAkunTypeName(element)
+      });
       this.initializeDataSource()
     }
+  }
+
+  initAkunTypeName(akun: Akun) {
+    return akun.akunType == 1 ? 'Cash' : akun.akunType == 2 ? 'Bank' : akun.akunType == 3 ? 'Fintech' : 'Emoney'
   }
 
   private initializeDataSource() {
@@ -71,7 +81,9 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
 
   private showaddAccountDialog() {
     const DialogRef = this.matDialog.open(AddAccountComponent, {
-      data: {}
+      data: {
+        akun: this.akuns
+      }
     })
 
     return DialogRef.afterClosed()
@@ -93,8 +105,9 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   private addRow(index: number, akun: Akun) {
+    akun.akunTypeName = this.initAkunTypeName(akun)
     this.akuns.splice(index, 0, akun)
-    this.table.renderRows()
+    if (this.akuns.length > 1) this.table.renderRows()
     this.initializeDataSource()
     this.ngAfterViewInit()
   }

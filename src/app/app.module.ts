@@ -18,6 +18,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
@@ -25,6 +26,7 @@ import { secret } from 'src/environments/secret';
 import { AddAccountComponent } from './components/add-account/add-account.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccountsComponent } from './components/accounts/accounts.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { AccountsComponent } from './components/accounts/accounts.component';
     IndexComponent,
     AddAccountComponent,
     AccountsComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +59,7 @@ import { AccountsComponent } from './components/accounts/accounts.component';
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    MatSelectModule,
 
     //ng-bootstrap
     NgbModule,

@@ -1,15 +1,26 @@
 <h1 mat-dialog-title>Add Account</h1>
 <mat-dialog-content>
-  	<form class="dynamic-form" [formGroup]="formGroup">
+  <form class="dynamic-form" [formGroup]="formGroup">
 		<mat-form-field>
-			<mat-label>Akun Name</mat-label>
+			<mat-label>Account Name</mat-label>
 			<input matInput placeholder="Ex. Kas" formControlName="akunName" required>
 			<button *ngIf="akunName.value" matSuffix mat-icon-button aria-label="Clear" (click)="akunName.setValue('')">
 				<mat-icon>close</mat-icon>
 			</button>
-			<mat-hint class="error" align="start" *ngIf="formGroup.value.akunName">
-				Please enter a valid Akun Name
+			<mat-hint class="error" align="start" *ngIf="formGroup.value.akunName && akunNames && akunNames.includes(formGroup.value.akunName)">
+				Account Name Duplicate
 			</mat-hint>
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Account Type</mat-label>
+			<mat-select formControlName="akunType" required>
+			  <mat-option value="1">Cash</mat-option>
+			  <mat-option value="2">Bank</mat-option>
+			  <mat-option value="3">Fintech</mat-option>
+			  <mat-option value="4">Emoney</mat-option>
+			</mat-select>
+			<mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
 		</mat-form-field>
 	</form>
 </mat-dialog-content>
@@ -17,7 +28,7 @@
 	<button mat-button mat-dialog-close>Cancel</button>
 	<button mat-flat-button color="primary"
 			(click)="saveAccount()"
-			[disabled]="formGroup.invalid">
+			[disabled]="invalid()">
 		Save
 	</button>
 </mat-dialog-actions>

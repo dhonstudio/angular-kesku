@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-account',
@@ -9,26 +9,37 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class AddAccountComponent implements OnInit {
   formGroup!: FormGroup
+  akunNames!: string[]
   akunName = new FormControl()
+  akunType = new FormControl()
 
   constructor(
-    private _formBuilder: FormBuilder,
-    private _matDialogRef: MatDialogRef<AddAccountComponent>,
+    private formBuilder: FormBuilder,
+    private matDialogRef: MatDialogRef<AddAccountComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
     this.createForm()
+    if (data.akun) {
+      this.akunNames = data.akun.map((x: { akunName: string }) => x.akunName)
+    }
   }
 
   ngOnInit(): void {
   }
 
   private createForm() {
-    this.formGroup = this._formBuilder.group({
+    this.formGroup = this.formBuilder.group({
       akunName: this.akunName,
+      akunType: this.akunType,
     });
   }
 
   saveAccount() {
-    this._matDialogRef.close(this.formGroup.value);    
+    this.matDialogRef.close(this.formGroup.value);    
+  }
+
+  invalid() {
+    return this.formGroup.invalid || this.akunNames.includes(this.formGroup.value.akunName)
   }
 
 }

@@ -8,6 +8,7 @@ export interface Akun {
     id_book: number;
     akunName: string;
     akunType: number;
+    akunTypeName: string;
     // budgeted: number;
     // periode: number;
     // is_active: number;
