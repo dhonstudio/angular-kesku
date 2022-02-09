@@ -16,18 +16,18 @@ export class KeskuService {
   }
 
   constructor(
-    private _httpClient: HttpClient,
-    private _globalService: GlobalService,
+    private httpClient: HttpClient,
+    private globalService: GlobalService,
   ) { }
 
   async initAccounts(id_book: number): Promise<Akun[]> {
     let get = `id_book=${id_book}`
-    return (await firstValueFrom(this._httpClient.get<any>(`${this._globalService.apiUrl}/${this.db}/${this.accountTable}?${get}`, this._globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data
+    return (await firstValueFrom(this.httpClient.get<any>(`${this.globalService.apiUrl}/${this.db}/${this.accountTable}?${get}`, this.globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data
   }
 
   async checkAccountName(akun: Akun) {
     let get = `akunName=${akun.akunName}&id_book=${akun.id_book}`
-    return (await firstValueFrom(this._httpClient.get<any>(`${this._globalService.apiUrl}/${this.db}/${this.accountTable}?${get}`, this._globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data.length == 0 ? true : false
+    return (await firstValueFrom(this.httpClient.get<any>(`${this.globalService.apiUrl}/${this.db}/${this.accountTable}?${get}`, this.globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data.length == 0 ? true : false
   }
 
   async addAccount(akun: Akun) {
@@ -38,6 +38,10 @@ export class KeskuService {
       // }
     })
     const post = result.join('&')
-    return (await firstValueFrom(this._httpClient.post<any>(`${this._globalService.apiUrl}/${this.db}/${this.accountTable}`, post, this._globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data
+    return (await firstValueFrom(this.httpClient.post<any>(`${this.globalService.apiUrl}/${this.db}/${this.accountTable}`, post, this.globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data
+  }
+
+  async deleteAccount(id_akun: number) {
+    return (await firstValueFrom(this.httpClient.get<any>(`${this.globalService.apiUrl}/${this.db}/${this.accountTable}/delete/${id_akun}`, this.globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data
   }
 }

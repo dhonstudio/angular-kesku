@@ -1,5 +1,6 @@
 export interface All {
-    akun: Akun[]
+    userId: number;
+    akun: Akun[];
 }
 
 export interface Akun {
@@ -10,5 +11,5 @@ export interface Akun {
     // budgeted: number;
     // periode: number;
     // is_active: number;
-    // stamp: number;
+    stamp: number;
 }

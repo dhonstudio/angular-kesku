@@ -35,15 +35,14 @@ import { AccountsComponent } from './components/accounts/accounts.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
     HttpClientModule,
-    ReactiveFormsModule,
+    AppRoutingModule,
 
     //social-login
     SocialLoginModule,
 
     //angular-material
+    BrowserAnimationsModule,
     MatProgressBarModule,
     MatToolbarModule,
     MatMenuModule,
@@ -55,11 +54,13 @@ import { AccountsComponent } from './components/accounts/accounts.component';
     MatInputModule,
     MatSnackBarModule,
     MatTableModule,
-    MatPaginatorModule,
     MatSortModule,
+    MatPaginatorModule,
 
     //ng-bootstrap
     NgbModule,
+
+    ReactiveFormsModule,
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {

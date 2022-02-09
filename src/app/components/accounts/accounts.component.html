@@ -29,7 +29,7 @@
           <button mat-mini-fab color="primary" aria-label="Edit" class="mr-2">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-mini-fab color="warn" aria-label="Delete">
+          <button mat-mini-fab color="warn" (click)="deleteAccount(i, element)" aria-label="Delete">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

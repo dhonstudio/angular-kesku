@@ -9,6 +9,7 @@ import { AddAccountComponent } from '../add-account/add-account.component';
 import { Akun, All } from 'src/app/models/kesku.model';
 import { KeskuService } from 'src/app/services/kesku.service';
 import { GlobalService } from 'src/app/services/angular_services/global.service';
+import { HubService } from 'src/app/services/hub.service';
 
 @Component({
   selector: 'app-index',
@@ -22,47 +23,54 @@ export class IndexComponent implements OnInit {
   socialUser = {
     name: ""
   }
-  userId!: number
-  tabIndex = 0
+  private userId!: number
+  tabIndex = 3
   data!: All
 
   constructor(
-    private _userService: UserService,
-    private _keskuService: KeskuService,
-    private _globalService: GlobalService,
-    private _cookieService: CookieService,
-    private _socialAuthService: SocialAuthService,
-    private _matDialog: MatDialog,
-  ) { 
-    // this.userService.checkUser('project', 'user_ci', {username:'admin', password:'admin'}, 'doon13@gmail.com', 'email').then(data => {
-    //   if (data.length > 0) this.socialUser.name = data[0].fullName
-    // })
-    if (this._cookieService.get('DSaAs13S')) {
-      this.userId = parseInt(CryptoJS.AES.decrypt(this._cookieService.get('DSaAs13S'), 'DSaAs13S').toString(CryptoJS.enc.Utf8))
+    private cookieService: CookieService,
+    private socialAuthService: SocialAuthService,
+    private userService: UserService,
+    private keskuService: KeskuService,
+    private hubService: HubService,
+  ) {
+    if (this.cookieService.get('DSaAs13S')) {
+      this.userId = parseInt(CryptoJS.AES.decrypt(this.cookieService.get('DSaAs13S'), 'DSaAs13S').toString(CryptoJS.enc.Utf8))
       this.initUser()
     } else {
-      this._socialAuthService.authState.subscribe(user => {
-        this._userService.checkUser('project', 'user_ci', {username:'admin', password:'admin'}, user.email, 'email').then(data => {
-          if (data.length > 0) this.userId = data[0].id
-          this.initUser()
+      this.socialAuthService.authState.subscribe(user => {
+        this.userService.checkUser('project', 'user_ci', {username:'admin', password:'admin'}, user.email, 'email').then(data => {
+          if (data.length > 0) {
+            this.userId = data[0].id
+            this.initUser()
+          } else {
+            this.logout()
+          }
         })
       })
     }
   }
 
   ngOnInit(): void {
+    if (this.hubService.reloadDataSubs == undefined) {    
+      this.hubService.reloadDataSubs = this.hubService.    
+      reloadDataEmitter.subscribe(() => {    
+        this.initData() 
+      })    
+    }
   }
 
   initUser() {
-    this._userService.checkUser('project', 'user_ci', {username:'admin', password:'admin'}, `${this.userId}`, 'id').then(data => {
+    this.userService.checkUser('project', 'user_ci', {username:'admin', password:'admin'}, this.userId, 'id').then(data => {
       if (data.length > 0) this.socialUser.name = data[0].fullName
       this.initData()
     })    
   }
 
   initData() {
-    this._keskuService.initAccounts(this.userId).then(result => {
+    this.keskuService.initAccounts(this.userId).then(result => {
       this.data = {
+        userId: this.userId,
         akun: result
       }
       this.isLoading = false
@@ -70,61 +78,20 @@ export class IndexComponent implements OnInit {
   }
 
   logout() {
-    this._cookieService.delete('DSaAs13S', '/')
-    this._socialAuthService.signOut(true)
+    this.cookieService.delete('DSaAs13S', '/')
+    this.socialAuthService.signOut(true)
     window.location.href = environment.redirect_auth
   }
 
   addAccount() {
-    this.showaddAccountDialog().subscribe(data => {
-      if (data) {
-        // this.sanitizeResult(data)
-        this.sendApiAddAccount(data)
-      }
-    })
+    this.hubService.addAccount()
   }
 
-  private showaddAccountDialog() {
-    const DialogRef = this._matDialog.open(AddAccountComponent, {
-      data: {
-        // trx: trx,
-        // akuns: this.akuns,
-        // trxs: this.trxs
-      }
-    })
-
-    return DialogRef.afterClosed()
+  changeTab(event: number) {
+    this.tabIndex = event
   }
 
-  private sendApiAddAccount(akun: Akun) {
-    akun.id_book = this.userId
-    this._keskuService.checkAccountName(akun).then(ok => {
-      if (ok) {
-        this._keskuService.addAccount(akun).then(data => {
-          console.log(data)
-        })
-      } else {
-        this._globalService.showSnackBar('Failed, account duplicate', 3000)
-      }
-      this.tabIndex = 3;
-    })
-    //
-      // if (data) {
-      //   if (data.id_new) {
-      //     this._dhonstudioFunctionService.showSnackBar('Add Transaction Success', 5000)
-      //     trx.id_trx = data.id_new
-      //     this.addRow(0, trx)
-      //     this._dhonstudioFunctionService.reloadData()
-      //   } else {
-      //     this._dhonstudioFunctionService.showSnackBar('Edit Transaction Success', 5000)
-      //     this.editRow(trx)
-      //   }
-      // } else {
-      //   this._dhonstudioFunctionService.showSnackBar('Failed, Akun Name Not Found!', 5000)
-      // }
-    //   console.log(data)
-    // })
-  }
+  
 
   addTransaction() {
 
