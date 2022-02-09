@@ -14,6 +14,7 @@ export interface Akun {
     // periode: number;
     // is_active: number;
     stamp: number;
+    total: number;
 }
 
 export interface Trx {

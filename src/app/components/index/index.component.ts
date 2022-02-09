@@ -22,6 +22,7 @@ export class IndexComponent implements OnInit {
   }
   private userId!: number
   tabIndex = 0
+  filter = ''
   data!: All
 
   constructor(
@@ -90,7 +91,13 @@ export class IndexComponent implements OnInit {
   }
 
   resetTab(value: any) {
-    this.tabIndex = value.index;
+    this.tabIndex = value.index
+    if (this.tabIndex != 1) this.filter = ''
+  }
+
+  filterTransactions(event: string) {
+    this.tabIndex = 1;
+    this.filter = event;
   }
 
 }

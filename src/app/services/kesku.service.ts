@@ -63,4 +63,20 @@ export class KeskuService {
   async deleteTransaction(id_trx: number) {
     return (await firstValueFrom(this.httpClient.get<any>(`${this.globalService.apiUrl}/${this.db}/${this.trxTable}/delete/${id_trx}`, this.globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data
   }
+
+  totalAccount(akun: Akun[], trx: Trx[]) {
+    akun.forEach((element, key) => {
+      if (element.akunType != 5)
+      element.total = 
+        trx.filter(x => x.id_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)
+        +trx.filter(x => x.to_akun == element.id_akun).map(t => t.kredit).reduce((acc, value) => acc + value, 0)
+        -trx.filter(x => x.id_akun == element.id_akun).map(t => t.kredit).reduce((acc, value) => acc + value, 0)
+        -trx.filter(x => x.to_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)
+      else
+      element.total = 
+        trx.filter(x => x.to_akun == element.id_akun).map(t => t.kredit).reduce((acc, value) => acc + value, 0)
+    })
+
+    return akun
+  }
 }

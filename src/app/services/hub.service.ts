@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Akun, Trx } from '../models/kesku.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,12 @@ export class HubService {
 
   constructor() { }
 
-  sendData(data: any) {
-    this.sendDataEmitter.emit(data)
+  sendData(akun: Akun[], trx: Trx[]) {
+    let compile = {
+      akun: akun,
+      trx: trx
+    }
+    this.sendDataEmitter.emit(compile)
   }
 
   addAccount() {

@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Akun, All } from 'src/app/models/kesku.model';
+import { Akun, All, Trx } from 'src/app/models/kesku.model';
 import { GlobalService } from 'src/app/services/angular_services/global.service';
 import { HubService } from 'src/app/services/hub.service';
 import { KeskuService } from 'src/app/services/kesku.service';
@@ -18,6 +18,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
   displayedColumns = ['stamp', 'akunName', 'akunType', 'action']
   dataSource!: MatTableDataSource<Akun>
   akuns!: Akun[]
+  trxs!: Trx[]
   isLoaded = false
   @Input() data!: All
   @Output() changeTab = new EventEmitter<number>()
@@ -56,6 +57,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
     this.akuns = []
     if (this.data && this.data.akun.length > 0) {
       this.akuns = this.data.akun
+      this.trxs = this.data.trx
       this.akuns.forEach((element, key) => {
         this.akuns[key].akunTypeName = this.initAkunTypeName(element)
       })
@@ -110,7 +112,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.akuns.length > 1) this.table.renderRows()
     this.initializeDataSource()
     this.ngAfterViewInit()
-    this.hubService.sendData(this.akuns)
+    this.hubService.sendData(this.akuns, this.trxs)
   }
 
   async deleteAccount(index: number, akun: Akun) {
@@ -136,7 +138,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
 
   private sendApiDeleteAccount(akun: Akun) {
     this.keskuService.deleteAccount(akun.id_akun)
-    this.hubService.sendData(this.akuns)
+    this.hubService.sendData(this.akuns, this.trxs)
   }
 
 }

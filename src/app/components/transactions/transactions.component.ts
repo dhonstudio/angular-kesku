@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -16,10 +17,13 @@ import { AddTransactionComponent } from '../add-transaction/add-transaction.comp
 })
 export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
   displayedColumns = ['stamp', 'akunName', 'amount', 'action']
+  filterForm = new FormControl();
   dataSource!: MatTableDataSource<Trx>
   akuns!: Akun[]
   trxs!: Trx[]
+  totalTrx = 0
   @Input() data!: All
+  @Input() filtered = '';
   @Output() changeTab = new EventEmitter<number>()
   @ViewChild(MatTable) table!: MatTable<Trx>
   @ViewChild(MatSort) sort!: MatSort
@@ -56,8 +60,12 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.data && this.data.akun.length > 0) {
       this.akuns = this.data.akun
       this.trxs = this.data.trx
+      this.akuns = this.keskuService.totalAccount(this.akuns, this.trxs)
 
       this.initializeDataSource()
+      this.filterForm.setValue(this.filtered)
+      this.filter(this.filtered)
+      this.totalTrx = this.filtered ? this.akuns.filter(s => s.akunName == this.filtered)[0].total : 0;
     }
   }
 
@@ -67,7 +75,7 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
       element.toName = this.initAkunName(element, 'to_akun')
       if (element.kredit > 0) element.debit = -element.kredit
       else element.debit = element.debit
-    });
+    })
     this.dataSource = new MatTableDataSource(this.trxs)
   }
 
@@ -75,6 +83,13 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
     if (type == 'id_akun') return this.akuns.find(x => x.id_akun == akun.id_akun && x.id_book == akun.id_book)?.akunName
     else if (type == 'to_akun') return this.akuns.find(x => x.id_akun == akun.to_akun && x.id_book == akun.id_book)?.akunName
     else return ""
+  }
+
+  private filter(value: string) {
+    this.dataSource.filter = value.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   private addTransaction() {
@@ -140,7 +155,7 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.trxs.length > 1) this.table.renderRows()
     this.initializeDataSource()
     this.ngAfterViewInit()
-    // this.hubService.sendData(this.trxs)
+    this.hubService.sendData(this.akuns, this.trxs)
   }
 
   async deleteTransaction(index: number, trx: Trx) {
@@ -166,7 +181,7 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
 
   private sendApiDeleteTransaction(trx: Trx) {
     this.keskuService.deleteTransaction(trx.id_trx)
-    this.hubService.sendData(this.akuns)
+    this.hubService.sendData(this.akuns, this.trxs)
   }
 
 }

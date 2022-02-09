@@ -1,8 +1,14 @@
 <div class="container-fluid">
+  <div>
+    <h1 *ngIf="totalTrx" class="mt-3 mb-1"><b>
+      Total 
+      {{totalTrx | currency:'IDR '}}
+    </b></h1>
+  </div>
 
   <mat-form-field appearance="standard">
     <mat-label>Filter</mat-label>
-    <input type="search" matInput placeholder="Ex. Kas" #input>
+    <input type="search" matInput placeholder="Ex. Kas" [formControl]="filterForm" #input>
   </mat-form-field>
   
   <div class="mat-elevation-z8">

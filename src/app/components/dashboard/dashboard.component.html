@@ -1,18 +1,25 @@
 <div class="container-fluid pt-3">
   <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
   <div *ngIf="isLoaded">
+    <h1>
+      <b>Total Assets </b>
+      <b *ngIf="hideTotalAsset">**** <mat-icon (click)="showTotalAsset()" class="cursor-pointer">remove_red_eye</mat-icon></b>
+      <b *ngIf="!hideTotalAsset">
+        {{totalAsset | currency:'IDR '}}
+      </b>
+    </h1>
     
     <div class="mat-elevation-z8" #content>
       <table mat-table [dataSource]="cash" class="mat-elevation-z8">
 
         <ng-container matColumnDef="akunName">
           <th mat-header-cell *matHeaderCellDef> <b>Cash</b> </th>
-          <td mat-cell *matCellDef="let element" matRipple class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
+          <td mat-cell *matCellDef="let element" matRipple (click)="showTransactions(element.akunName)" class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef> <b>Total</b> </th>
-          <td mat-cell *matCellDef="let element"> {{element.stamp | currency:'IDR '}} </td>
+          <th mat-header-cell *matHeaderCellDef> <b>{{totalCash | currency:'IDR '}}</b> </th>
+          <td mat-cell *matCellDef="let element"> {{element.total | currency:'IDR '}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -23,12 +30,12 @@
 
         <ng-container matColumnDef="akunName">
           <th mat-header-cell *matHeaderCellDef> <b>Banks</b> </th>
-          <td mat-cell *matCellDef="let element" matRipple class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
+          <td mat-cell *matCellDef="let element" matRipple (click)="showTransactions(element.akunName)" class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef> <b>Total</b> </th>
-          <td mat-cell *matCellDef="let element"> {{element.stamp | currency:'IDR '}} </td>
+          <th mat-header-cell *matHeaderCellDef> <b>{{totalBanks | currency:'IDR '}}</b> </th>
+          <td mat-cell *matCellDef="let element"> {{element.total | currency:'IDR '}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -39,12 +46,12 @@
 
         <ng-container matColumnDef="akunName">
           <th mat-header-cell *matHeaderCellDef> <b>Fintechs</b> </th>
-          <td mat-cell *matCellDef="let element" matRipple class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
+          <td mat-cell *matCellDef="let element" matRipple (click)="showTransactions(element.akunName)" class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef> <b>Total</b> </th>
-          <td mat-cell *matCellDef="let element"> {{element.stamp | currency:'IDR '}} </td>
+          <th mat-header-cell *matHeaderCellDef> <b>{{totalFintechs | currency:'IDR '}}</b> </th>
+          <td mat-cell *matCellDef="let element"> {{element.total | currency:'IDR '}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -55,12 +62,12 @@
 
         <ng-container matColumnDef="akunName">
           <th mat-header-cell *matHeaderCellDef> <b>Emoneys</b> </th>
-          <td mat-cell *matCellDef="let element" matRipple class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
+          <td mat-cell *matCellDef="let element" matRipple (click)="showTransactions(element.akunName)" class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef> <b>Total</b> </th>
-          <td mat-cell *matCellDef="let element"> {{element.stamp | currency:'IDR '}} </td>
+          <th mat-header-cell *matHeaderCellDef> <b>{{totalEmoneys | currency:'IDR '}}</b> </th>
+          <td mat-cell *matCellDef="let element"> {{element.total | currency:'IDR '}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -71,12 +78,12 @@
 
         <ng-container matColumnDef="akunName">
           <th mat-header-cell *matHeaderCellDef> <b>Outcomes</b> </th>
-          <td mat-cell *matCellDef="let element" matRipple class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
+          <td mat-cell *matCellDef="let element" matRipple (click)="showTransactions(element.akunName)" class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef> <b>Total</b> </th>
-          <td mat-cell *matCellDef="let element"> {{element.stamp | currency:'IDR '}} </td>
+          <th mat-header-cell *matHeaderCellDef> <b>{{totalOutcomes | currency:'IDR '}}</b> </th>
+          <td mat-cell *matCellDef="let element"> {{element.total | currency:'IDR '}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

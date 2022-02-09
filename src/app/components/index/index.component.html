@@ -18,16 +18,16 @@
     </mat-menu>
   </mat-toolbar>
   <div class="mb-2">
-    <button mat-raised-button (click)="addAccount()" color="accent" class="mx-3 mt-2">
-      Add Account
-    </button>
     <button mat-raised-button (click)="addTransaction()" color="primary" class="mx-1 mt-2">
       Add Transaction
     </button>
+    <button mat-raised-button (click)="addAccount()" color="accent" class="mx-3 mt-2">
+      Add Account
+    </button>
   </div>
   <mat-tab-group mat-align-tabs="start" [selectedIndex]="tabIndex" (selectedTabChange)="resetTab($event)">
-    <mat-tab label="Dashboard"><app-dashboard [data]="data"></app-dashboard></mat-tab>
-    <mat-tab label="Transaction"><app-transactions [data]="data" (changeTab)="changeTab($event)"></app-transactions></mat-tab>
+    <mat-tab label="Dashboard"><app-dashboard [data]="data" (filterTransactions)="filterTransactions($event)"></app-dashboard></mat-tab>
+    <mat-tab label="Transaction"><app-transactions [data]="data" [filtered]="filter" (changeTab)="changeTab($event)"></app-transactions></mat-tab>
     <mat-tab label="Spending"></mat-tab>
     <mat-tab label="Accounts"><app-accounts [data]="data" (changeTab)="changeTab($event)"></app-accounts></mat-tab>
   </mat-tab-group>
