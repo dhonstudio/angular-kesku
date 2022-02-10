@@ -72,6 +72,14 @@ export class KeskuService {
       else if (element.akunType == 6)
       element.total = 
         trx.filter(x => x.to_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)
+      else if (element.akunType == 7)
+      element.total = 
+        trx.filter(x => x.to_akun == element.id_akun).map(t => t.kredit).reduce((acc, value) => acc + value, 0)
+        -trx.filter(x => x.to_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)
+      else if (element.akunType == 8)
+      element.total = 
+        trx.filter(x => x.to_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)
+        -trx.filter(x => x.to_akun == element.id_akun).map(t => t.kredit).reduce((acc, value) => acc + value, 0)
       else
       element.total = 
         trx.filter(x => x.id_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)

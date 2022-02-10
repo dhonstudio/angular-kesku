@@ -26,6 +26,22 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
+      <table mat-table [dataSource]="receiveables" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="akunName">
+          <th mat-header-cell *matHeaderCellDef> <b>Receiveables</b> </th>
+          <td mat-cell *matCellDef="let element" matRipple (click)="showTransactions(element.akunName)" class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> <b>{{totalReceiveables | currency:'IDR '}}</b> </th>
+          <td mat-cell *matCellDef="let element"> {{element.total | currency:'IDR '}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
       <table mat-table [dataSource]="banks" class="mat-elevation-z8">
 
         <ng-container matColumnDef="akunName">
@@ -67,6 +83,22 @@
 
         <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef> <b>{{totalEmoneys | currency:'IDR '}}</b> </th>
+          <td mat-cell *matCellDef="let element"> {{element.total | currency:'IDR '}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <table mat-table [dataSource]="payables" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="akunName">
+          <th mat-header-cell *matHeaderCellDef> <b>Payables</b> </th>
+          <td mat-cell *matCellDef="let element" matRipple (click)="showTransactions(element.akunName)" class="cursor-pointer"><text class="text-as-link">{{element.akunName}}</text> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> <b>{{totalPayables | currency:'IDR '}}</b> </th>
           <td mat-cell *matCellDef="let element"> {{element.total | currency:'IDR '}} </td>
         </ng-container>
 

@@ -36,7 +36,7 @@ export class AddTransactionComponent implements OnInit {
       this.akunMinusOutcomes = []
       this.akunNames = data.akuns.map((x: { akunName: string }) => x.akunName)
       data.akuns.forEach((element: Akun, key: number) => {
-        if (element.akunType != 5 && element.akunType != 6) this.akunMinusOutcomes.push(this.akunNames[key])
+        if (element.akunType > 0 && element.akunType < 5) this.akunMinusOutcomes.push(this.akunNames[key])
       })
       this.initAutoComplete()
     }
