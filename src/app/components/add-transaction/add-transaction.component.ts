@@ -14,6 +14,7 @@ export class AddTransactionComponent implements OnInit {
   formGroup!: FormGroup
   akunNames!: string[]
   akunMinusOutcomes!: string[]
+  notes!: string[]
   akunName = new FormControl()
   method = new FormControl()
   amount = new FormControl()
@@ -21,6 +22,7 @@ export class AddTransactionComponent implements OnInit {
   note = new FormControl()
   filteredAkunName!: Observable<string[]>
   filteredToName!: Observable<string[]>
+  filteredNote!: Observable<string[]>
 
   constructor(
     private globalService: GlobalService,
@@ -31,6 +33,10 @@ export class AddTransactionComponent implements OnInit {
     this.createForm()
     if (data.akunName) {
       this.akunName.setValue(data.akunName)
+    }
+    if (data.trxs) {
+      let notes: string[] = data.trxs.map((x: { note: string }) => x.note)
+      this.notes = notes.filter((element, i) => i === notes.indexOf(element)).filter((a) => a)
     }
     if (data.akuns) {
       this.akunMinusOutcomes = []
@@ -65,6 +71,11 @@ export class AddTransactionComponent implements OnInit {
       startWith(''),
       map(value => this.globalService.filter(value, this.akunNames)),
     )
+
+    this.filteredNote = this.note.valueChanges.pipe(
+      startWith(''),
+      map(value => this.globalService.filter(value, this.notes)),
+    )    
   }
 
   saveTransaction() {

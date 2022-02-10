@@ -52,8 +52,6 @@ export class TransactionsComponent implements OnInit, OnChanges {
     if (this.data && this.data.akun) {
       this.akuns = this.data.akun
       this.trxs = this.data.trx
-      console.log(this.akuns)
-      console.log(this.trxs)
       this.akuns = this.keskuService.totalAccount(this.akuns, this.trxs)
 
       this.totalTrx = this.filtered ? this.akuns.find(s => s.akunName === this.filtered)?.total : 0
@@ -106,6 +104,7 @@ export class TransactionsComponent implements OnInit, OnChanges {
     const DialogRef = this.matDialog.open(AddTransactionComponent, {
       data: {
         akuns: this.akuns,
+        trxs: this.trxs,
         akunName: this.filtered
       }
     })

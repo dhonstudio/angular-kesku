@@ -52,11 +52,17 @@
 		<mat-form-field>
 			<mat-label>Note</mat-label>
 			<input matInput
+				[matAutocomplete]="autoNote"
 				maxlength="500"
 				placeholder="Ex. It makes me feel..." formControlName="note">
 			<button *ngIf="note.value" matSuffix mat-icon-button aria-label="Clear" (click)="note.setValue('')">
 				<mat-icon>close</mat-icon>
 			</button>
+			<mat-autocomplete autoActiveFirstOption #autoNote="matAutocomplete">
+				<mat-option *ngFor="let option of filteredNote | async" [value]="option">
+				  {{option}}
+				</mat-option>
+			</mat-autocomplete>
 			<mat-hint align="end">{{note.value?.length || 0}}/500</mat-hint>
 		</mat-form-field>
 	</form>
