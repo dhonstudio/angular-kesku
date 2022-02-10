@@ -18,11 +18,13 @@ export class DashboardComponent implements OnInit, OnChanges {
   fintechs!: Akun[]
   emoneys!: Akun[]
   outcomes!: Akun[]
+  incomes!: Akun[]
   totalCash!: number
   totalBanks!: number
   totalFintechs!: number
   totalEmoneys!: number
   totalOutcomes!: number
+  totalIncomes!: number
   totalAsset!: number
   hideTotalAsset = true
   @Input() data!: All
@@ -61,6 +63,7 @@ export class DashboardComponent implements OnInit, OnChanges {
       this.fintechs = []
       this.emoneys = []
       this.outcomes = []
+      this.incomes = []
 
       let akunTypes = this.akuns.map(x => x.akunType)
       akunTypes.forEach((element, key) => {
@@ -69,6 +72,7 @@ export class DashboardComponent implements OnInit, OnChanges {
         if (element == 3) this.fintechs.push(this.akuns[key])
         if (element == 4) this.emoneys.push(this.akuns[key])
         if (element == 5) this.outcomes.push(this.akuns[key])
+        if (element == 6) this.incomes.push(this.akuns[key])
       })
 
       this.totalCash = this.cash.map(t => t.total).reduce((acc, value) => acc + value, 0)
@@ -76,6 +80,7 @@ export class DashboardComponent implements OnInit, OnChanges {
       this.totalFintechs = this.fintechs.map(t => t.total).reduce((acc, value) => acc + value, 0)
       this.totalEmoneys = this.emoneys.map(t => t.total).reduce((acc, value) => acc + value, 0)
       this.totalOutcomes = this.outcomes.map(t => t.total).reduce((acc, value) => acc + value, 0)
+      this.totalIncomes = this.incomes.map(t => t.total).reduce((acc, value) => acc + value, 0)
 
       this.totalAsset = this.totalCash + this.totalBanks + this.totalFintechs + this.totalEmoneys - this.totalOutcomes
 
