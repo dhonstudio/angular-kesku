@@ -15,11 +15,13 @@ export class HubService {
 
   constructor() { }
 
-  sendData(akun: Akun[], trx: Trx[]) {
+  sendData(akun: Akun[], trx: Trx[], filtered: string = '') {
     let compile = {
       akun: akun,
-      trx: trx
+      trx: trx,
+      filtered: filtered
     }
+    
     this.sendDataEmitter.emit(compile)
   }
 

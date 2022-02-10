@@ -34,12 +34,6 @@ export class DashboardComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    if (this.hubService.sendDataSubs == undefined) {    
-      this.hubService.sendDataSubs = this.hubService.    
-      sendDataEmitter.subscribe((data) => {
-        this.receiveData(data.akun, data.trx) 
-      })    
-    }
   }
 
   ngOnChanges(): void {
@@ -57,8 +51,7 @@ export class DashboardComponent implements OnInit, OnChanges {
   }
 
   private initData() {
-    this.akuns = []
-    if (this.data && this.data.akun.length > 0) {
+    if (this.data && this.data.akun) {
       this.akuns = this.data.akun
       this.trxs = this.data.trx
       this.akuns = this.keskuService.totalAccount(this.akuns, this.trxs)

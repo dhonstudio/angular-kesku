@@ -29,6 +29,9 @@ export class AddTransactionComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
     this.createForm()
+    if (data.akunName) {
+      this.akunName.setValue(data.akunName)
+    }
     if (data.akuns) {
       this.akunMinusOutcomes = []
       this.akunNames = data.akuns.map((x: { akunName: string }) => x.akunName)

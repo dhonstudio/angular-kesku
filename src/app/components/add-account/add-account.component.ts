@@ -19,9 +19,7 @@ export class AddAccountComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
     this.createForm()
-    if (data.akuns) {
-      this.akunNames = data.akuns.map((x: { akunName: string }) => x.akunName)
-    }
+    this.akunNames = data.akuns.map((x: { akunName: string }) => x.akunName)
   }
 
   ngOnInit(): void {

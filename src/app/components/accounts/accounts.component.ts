@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,13 +14,14 @@ import { AddAccountComponent } from '../add-account/add-account.component';
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.scss']
 })
-export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
+export class AccountsComponent implements OnInit, OnChanges {
   displayedColumns = ['stamp', 'akunName', 'akunType', 'action']
   dataSource!: MatTableDataSource<Akun>
   akuns!: Akun[]
   trxs!: Trx[]
   isLoaded = false
   @Input() data!: All
+  @Input() filtered = ''
   @Output() changeTab = new EventEmitter<number>()
   @ViewChild(MatTable) table!: MatTable<Akun>
   @ViewChild(MatSort) sort!: MatSort
@@ -37,7 +38,7 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.hubService.addAccountSubs == undefined) {    
       this.hubService.addAccountSubs = this.hubService.    
       addAccountEmitter.subscribe(() => {    
-        this.addAccount() 
+        this.addAccount()
       })    
     }
   }
@@ -46,16 +47,8 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
     this.initData()
   }
 
-  ngAfterViewInit(): void {
-    if (this.dataSource) {
-      this.dataSource.paginator = this.paginator
-      this.dataSource.sort = this.sort
-    }
-  }
-
   private initData() {
-    this.akuns = []
-    if (this.data && this.data.akun.length > 0) {
+    if (this.data && this.data.akun) {
       this.akuns = this.data.akun
       this.trxs = this.data.trx
       this.akuns.forEach((element, key) => {
@@ -71,6 +64,8 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
 
   private initializeDataSource() {
     this.dataSource = new MatTableDataSource(this.akuns)
+    this.dataSource.paginator = this.paginator
+    this.dataSource.sort = this.sort
   }
 
   private addAccount() {
@@ -109,9 +104,8 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
   private addRow(index: number, akun: Akun) {
     akun.akunTypeName = this.initAkunTypeName(akun)
     this.akuns.splice(index, 0, akun)
-    if (this.akuns.length > 1) this.table.renderRows()
+    this.table.renderRows()
     this.initializeDataSource()
-    this.ngAfterViewInit()
     this.hubService.sendData(this.akuns, this.trxs)
   }
 
@@ -132,7 +126,6 @@ export class AccountsComponent implements OnInit, OnChanges, AfterViewInit {
     const row = this.akuns.splice(index, 1)
     this.table.renderRows()
     this.initializeDataSource()
-    this.ngAfterViewInit()
     return row[0]
   }
 

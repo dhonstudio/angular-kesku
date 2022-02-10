@@ -10,9 +10,6 @@ export interface Akun {
     akunName: string;
     akunType: number;
     akunTypeName: string;
-    // budgeted: number;
-    // periode: number;
-    // is_active: number;
     stamp: number;
     total: number;
 }

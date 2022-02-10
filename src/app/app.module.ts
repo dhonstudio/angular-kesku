@@ -11,7 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -20,7 +20,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatRadioModule } from '@angular/material/radio';
+import { MatRadioModule, MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
@@ -75,10 +75,15 @@ import { TransactionsComponent } from './components/transactions/transactions.co
     ReactiveFormsModule,
   ],
   providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: true }},
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {
       appearance: 'fill',
       floatLabel: 'none'
     }},
+    {
+      provide: MAT_RADIO_DEFAULT_OPTIONS,
+      useValue: { color: 'primary' },
+    },
     {provide: 'SocialAuthServiceConfig', useValue: {
       autoLogin: true,
       providers: [

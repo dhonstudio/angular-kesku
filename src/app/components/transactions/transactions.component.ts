@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -15,15 +15,15 @@ import { AddTransactionComponent } from '../add-transaction/add-transaction.comp
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.scss']
 })
-export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
+export class TransactionsComponent implements OnInit, OnChanges {
   displayedColumns = ['stamp', 'akunName', 'amount', 'action']
   filterForm = new FormControl();
   dataSource!: MatTableDataSource<Trx>
   akuns!: Akun[]
   trxs!: Trx[]
-  totalTrx = 0
+  totalTrx: number | undefined = 0
   @Input() data!: All
-  @Input() filtered = '';
+  @Input() filtered = ''
   @Output() changeTab = new EventEmitter<number>()
   @ViewChild(MatTable) table!: MatTable<Trx>
   @ViewChild(MatSort) sort!: MatSort
@@ -44,28 +44,20 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.initData()
   }
 
-  ngAfterViewInit(): void {
-    if (this.dataSource) {
-      this.dataSource.paginator = this.paginator
-      this.dataSource.sort = this.sort
-    }
-  }
-
   private initData() {
-    this.akuns = []
-    if (this.data && this.data.akun.length > 0) {
+    if (this.data && this.data.akun) {
       this.akuns = this.data.akun
       this.trxs = this.data.trx
       this.akuns = this.keskuService.totalAccount(this.akuns, this.trxs)
 
-      this.initializeDataSource()
+      this.totalTrx = this.filtered ? this.akuns.find(s => s.akunName === this.filtered)?.total : 0
       this.filterForm.setValue(this.filtered)
+      this.initializeDataSource()
       this.filter(this.filtered)
-      this.totalTrx = this.filtered ? this.akuns.filter(s => s.akunName == this.filtered)[0].total : 0;
     }
   }
 
@@ -73,10 +65,16 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
     this.trxs.forEach((element, key) => {      
       element.akunName = this.initAkunName(element, 'id_akun')
       element.toName = this.initAkunName(element, 'to_akun')
-      if (element.kredit > 0) element.debit = -element.kredit
-      else element.debit = element.debit
+      if (element.kredit > 0) {
+        element.debit = -element.kredit
+        element.kredit = 0
+      } else {
+        element.debit = element.debit
+      }
     })
     this.dataSource = new MatTableDataSource(this.trxs)
+    this.dataSource.paginator = this.paginator
+    this.dataSource.sort = this.sort
   }
 
   private initAkunName(akun: Trx, type: string) {
@@ -87,6 +85,7 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
 
   private filter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
+    
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -102,9 +101,11 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   private showaddTransactionDialog() {
+    if (this.filtered == 'filter') this.filtered = ''
     const DialogRef = this.matDialog.open(AddTransactionComponent, {
       data: {
-        akuns: this.akuns
+        akuns: this.akuns,
+        akunName: this.filtered
       }
     })
 
@@ -154,8 +155,7 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
     this.trxs.splice(index, 0, trx)
     if (this.trxs.length > 1) this.table.renderRows()
     this.initializeDataSource()
-    this.ngAfterViewInit()
-    this.hubService.sendData(this.akuns, this.trxs)
+    this.hubService.sendData(this.akuns, this.trxs, this.filtered)
   }
 
   async deleteTransaction(index: number, trx: Trx) {
@@ -175,7 +175,6 @@ export class TransactionsComponent implements OnInit, OnChanges, AfterViewInit {
     const row = this.trxs.splice(index, 1)
     this.table.renderRows()
     this.initializeDataSource()
-    this.ngAfterViewInit()
     return row[0]
   }
 
