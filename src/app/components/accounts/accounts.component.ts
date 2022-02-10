@@ -60,7 +60,7 @@ export class AccountsComponent implements OnInit, OnChanges {
   }
 
   private initAkunTypeName(akun: Akun) {
-    return akun.akunType == 1 ? 'Cash' : akun.akunType == 2 ? 'Bank' : akun.akunType == 3 ? 'Fintech' : akun.akunType == 4 ? 'Emoney' : akun.akunType == 5 ? 'Outcome' : akun.akunType == 6 ? 'Income' : akun.akunType == 7 ? 'Receiveable' : 'Payable'
+    return akun.akunType == 1 ? 'Cash' : akun.akunType == 2 ? 'Bank' : akun.akunType == 3 ? 'Fintech' : akun.akunType == 4 ? 'Emoney' : akun.akunType == 5 ? 'Outcome' : akun.akunType == 6 ? 'Income' : akun.akunType == 7 ? 'Receiveable' : akun.akunType == 8 ? 'Payable' : 'Saving'
   }
 
   private initializeDataSource() {
