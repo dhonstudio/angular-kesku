@@ -93,7 +93,7 @@ export class DashboardComponent implements OnInit, OnChanges {
       this.totalPayables = this.payables.map(t => t.total).reduce((acc, value) => acc + value, 0)
 
       this.totalAsset = 
-        this.totalCash + this.totalBanks + this.totalFintechs + this.totalEmoneys - this.totalOutcomes
+        this.totalCash + this.totalBanks + this.totalFintechs + this.totalEmoneys
         + this.totalReceiveables - this.totalPayables
 
       this.isLoaded = true

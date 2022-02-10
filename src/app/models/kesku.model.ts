@@ -12,6 +12,7 @@ export interface Akun {
     akunTypeName: string;
     stamp: number;
     total: number;
+    deleteable?: boolean;
 }
 
 export interface Trx {

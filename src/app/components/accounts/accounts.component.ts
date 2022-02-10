@@ -53,6 +53,7 @@ export class AccountsComponent implements OnInit, OnChanges {
       this.trxs = this.data.trx
       this.akuns.forEach((element, key) => {
         this.akuns[key].akunTypeName = this.initAkunTypeName(element)
+        this.akuns[key].deleteable = !this.trxs.map(x => x.id_akun).includes(element.id_akun) && !this.trxs.map(x => x.to_akun).includes(element.id_akun)
       })
       this.initializeDataSource()
     }
