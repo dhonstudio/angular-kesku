@@ -24,4 +24,5 @@ export interface Trx {
     stamp: number;
     akunName?: string;
     toName?: string;
+    amount?: number;
 }

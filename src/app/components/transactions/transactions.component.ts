@@ -52,6 +52,8 @@ export class TransactionsComponent implements OnInit, OnChanges {
     if (this.data && this.data.akun) {
       this.akuns = this.data.akun
       this.trxs = this.data.trx
+      console.log(this.akuns)
+      console.log(this.trxs)
       this.akuns = this.keskuService.totalAccount(this.akuns, this.trxs)
 
       this.totalTrx = this.filtered ? this.akuns.find(s => s.akunName === this.filtered)?.total : 0
@@ -66,10 +68,9 @@ export class TransactionsComponent implements OnInit, OnChanges {
       element.akunName = this.initAkunName(element, 'id_akun')
       element.toName = this.initAkunName(element, 'to_akun')
       if (element.kredit > 0) {
-        element.debit = -element.kredit
-        element.kredit = 0
+        element.amount = -element.kredit
       } else {
-        element.debit = element.debit
+        element.amount = element.debit
       }
     })
     this.dataSource = new MatTableDataSource(this.trxs)
@@ -148,7 +149,8 @@ export class TransactionsComponent implements OnInit, OnChanges {
   }
 
   private addRow(index: number, trx: Trx) {
-    if (trx.kredit > 0) trx.debit = trx.kredit
+    if (trx.kredit > 0) trx.amount = trx.kredit
+    else trx.amount = trx.debit
     trx.akunName = this.initAkunName(trx, 'id_akun')
     trx.toName = this.initAkunName(trx, 'to_akun')
 
