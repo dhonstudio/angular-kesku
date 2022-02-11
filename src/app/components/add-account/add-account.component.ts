@@ -11,7 +11,7 @@ import { Akun } from 'src/app/models/kesku.model';
 export class AddAccountComponent implements OnInit {
   formGroup!: FormGroup
   akunNames!: string[]
-  positions!: number[]
+  positions: number[] = []
   id_akun = new FormControl()
   akunName = new FormControl()
   akunType = new FormControl()
@@ -59,7 +59,7 @@ export class AddAccountComponent implements OnInit {
     let matchAkunType: Akun[] = this.data.akuns.filter((x: { akunType: any; }) => x.akunType == akunType)
     this.positions = []
     matchAkunType.forEach((element, key) => {
-      this.positions.push(key+2)
+      if (akunType != 5 && akunType != 6) this.positions.push(key+2)
     })
   }
 

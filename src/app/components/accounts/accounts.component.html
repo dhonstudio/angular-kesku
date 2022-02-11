@@ -20,7 +20,7 @@
   
       <ng-container matColumnDef="akunType">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Type </th>
-        <td mat-cell *matCellDef="let element"> {{element.akunTypeName}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.akunTypeName}} {{ element.akunType != 5 && element.akunType != 6 ? '(' + element.position + ')' : '' }} </td>
       </ng-container>
   
       <ng-container matColumnDef="action">
