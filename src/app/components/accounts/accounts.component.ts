@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -16,6 +17,7 @@ import { AddAccountComponent } from '../add-account/add-account.component';
 })
 export class AccountsComponent implements OnInit, OnChanges {
   displayedColumns = ['stamp', 'akunName', 'akunType', 'action']
+  filterForm = new FormControl()
   dataSource!: MatTableDataSource<Akun>
   akuns!: Akun[]
   trxs!: Trx[]
@@ -67,6 +69,11 @@ export class AccountsComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.akuns)
     this.dataSource.paginator = this.paginator
     this.dataSource.sort = this.sort
+
+    if (this.filterForm.value) {
+      this.filterForm.setValue(this.filterForm.value)
+      this.filter(this.filterForm.value)
+    }
   }
 
   private addAccount() {
@@ -142,17 +149,14 @@ export class AccountsComponent implements OnInit, OnChanges {
     this.hubService.reloadData()
   }
 
-  async deleteAccount(index: number, akun: Akun) {
-    let index_paginator = index + (this.paginator.pageIndex * this.paginator.pageSize)
-    let index_fix = index_paginator - (this.akuns.length - 1)
-    let index_final = 0
-    if (index_fix < 0) index_final = - index_fix
-    else index_final = index_fix
-    const row = this.deleteRow(index_final)
+  async deleteAccount(akun: Akun) {
+    const index = this.akuns.findIndex(a => a.id_akun === akun.id_akun)
+    const row = this.deleteRow(index)
     const undo = this.globalService.showSnackBarWithUndo(`Account Name: ${row.akunName} Deleted`, 'Delete Account Canceled', 3000)
     if (await undo) {
-      this.addRow(index_final, row)
-    } else this.sendApiDeleteAccount(akun)
+      this.addRow(index, row)
+    } 
+    else this.sendApiDeleteAccount(akun)
   }
 
   private deleteRow(index: number){
@@ -164,7 +168,20 @@ export class AccountsComponent implements OnInit, OnChanges {
 
   private sendApiDeleteAccount(akun: Akun) {
     this.keskuService.deleteAccount(akun.id_akun)
-    this.hubService.sendData(this.akuns, this.trxs)
+    this.hubService.reloadData()
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value
+    this.filter(filterValue)
+  }
+
+  private filter(value: string) {
+    this.dataSource.filter = value.trim().toLowerCase()
+    
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage()
+    }
   }
 
 }

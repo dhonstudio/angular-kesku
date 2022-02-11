@@ -2,7 +2,7 @@
 
   <mat-form-field appearance="standard">
     <mat-label>Filter</mat-label>
-    <input type="search" matInput placeholder="Ex. Kas" #input>
+    <input type="search" matInput (keyup)="applyFilter($event)" placeholder="Ex. Kas" [formControl]="filterForm" #input>
   </mat-form-field>
   
   <div class="mat-elevation-z8">
@@ -29,7 +29,7 @@
           <button (click)="editAccount(element)" mat-mini-fab color="primary" aria-label="Edit" class="mr-2">
             <mat-icon>edit</mat-icon>
           </button>
-          <button *ngIf="element.deleteable" mat-mini-fab color="warn" (click)="deleteAccount(i, element)" aria-label="Delete">
+          <button *ngIf="element.deleteable" mat-mini-fab color="warn" (click)="deleteAccount(element)" aria-label="Delete">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

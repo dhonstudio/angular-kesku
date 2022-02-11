@@ -17,13 +17,14 @@ import { AddTransactionComponent } from '../add-transaction/add-transaction.comp
 })
 export class TransactionsComponent implements OnInit, OnChanges {
   displayedColumns = ['stamp', 'akunName', 'amount', 'action']
-  filterForm = new FormControl();
+  filterForm = new FormControl()
   dataSource!: MatTableDataSource<Trx>
   akuns!: Akun[]
   trxs!: Trx[]
   totalTrx: number | undefined = 0
   @Input() data!: All
   @Input() filtered = ''
+  @Input() tabIndex!: number
   @Output() changeTab = new EventEmitter<number>()
   @ViewChild(MatTable) table!: MatTable<Trx>
   @ViewChild(MatSort) sort!: MatSort
@@ -55,9 +56,8 @@ export class TransactionsComponent implements OnInit, OnChanges {
       this.akuns = this.keskuService.totalAccount(this.akuns, this.trxs)
 
       this.totalTrx = this.filtered ? this.akuns.find(s => s.akunName === this.filtered)?.total : 0
-      this.filterForm.setValue(this.filtered)
       this.initializeDataSource()
-      this.filter(this.filtered)
+      if (this.tabIndex != 1) this.filterForm.setValue(``)
     }
   }
 
@@ -74,6 +74,14 @@ export class TransactionsComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.trxs)
     this.dataSource.paginator = this.paginator
     this.dataSource.sort = this.sort
+    
+    if (this.filtered) {
+      this.filterForm.setValue(this.filtered)
+      this.filter(this.filtered)
+    } else if (this.filterForm.value) {
+      this.filterForm.setValue(this.filterForm.value)
+      this.filter(this.filterForm.value)
+    }
   }
 
   private initAkunName(akun: Trx, type: string) {
@@ -83,10 +91,10 @@ export class TransactionsComponent implements OnInit, OnChanges {
   }
 
   private filter(value: string) {
-    this.dataSource.filter = value.trim().toLowerCase();
+    this.dataSource.filter = value.trim().toLowerCase()
     
     if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+      this.dataSource.paginator.firstPage()
     }
   }
 
@@ -159,20 +167,18 @@ export class TransactionsComponent implements OnInit, OnChanges {
     this.hubService.sendData(this.akuns, this.trxs, this.filtered)
   }
 
-  async deleteTransaction(index: number, trx: Trx) {
-    let index_paginator = index + (this.paginator.pageIndex * this.paginator.pageSize)
-    let index_fix = index_paginator - (this.trxs.length - 1)
-    let index_final = 0
-    if (index_fix < 0) index_final = - index_fix
-    else index_final = index_fix
-    const row = this.deleteRow(index_final)
-    const undo = this.globalService.showSnackBarWithUndo(`Transaction ID: ${row.id_trx} Deleted`, 'Delete Transaction Canceled', 3000)
+  async deleteTransaction(trx: Trx) {
+    const index = this.trxs.findIndex(t => t.id_trx === trx.id_trx)
+    const row = this.deleteRow(index)
+    let toName = row.toName ? ` to ${row.toName}` : ``
+    const undo = this.globalService.showSnackBarWithUndo(`Transaction: ${row.akunName}${toName} in the amount of ${row.amount} Deleted`, 'Delete Transaction Canceled', 3000)
     if (await undo) {
-      this.addRow(index_final, row)
-    } else this.sendApiDeleteTransaction(trx)
+      this.addRow(index, row)
+    } 
+    else this.sendApiDeleteTransaction(trx)
   }
 
-  private deleteRow(index: number){
+  private deleteRow(index: number){    
     const row = this.trxs.splice(index, 1)
     this.table.renderRows()
     this.initializeDataSource()
@@ -181,7 +187,12 @@ export class TransactionsComponent implements OnInit, OnChanges {
 
   private sendApiDeleteTransaction(trx: Trx) {
     this.keskuService.deleteTransaction(trx.id_trx)
-    this.hubService.sendData(this.akuns, this.trxs)
+    this.hubService.reloadData()
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value
+    this.filter(filterValue)
   }
 
 }
