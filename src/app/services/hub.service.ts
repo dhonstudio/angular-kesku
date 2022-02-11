@@ -8,6 +8,8 @@ import { Akun, Trx } from '../models/kesku.model';
 export class HubService {
   sendDataEmitter = new EventEmitter()
   sendDataSubs!: Subscription
+  reloadDataEmitter = new EventEmitter()
+  reloadDataSubs!: Subscription
   addAccountEmitter = new EventEmitter()
   addAccountSubs!: Subscription
   addTransactionEmitter = new EventEmitter()
@@ -23,6 +25,10 @@ export class HubService {
     }
     
     this.sendDataEmitter.emit(compile)
+  }
+
+  reloadData() {
+    this.reloadDataEmitter.emit()
   }
 
   addAccount() {

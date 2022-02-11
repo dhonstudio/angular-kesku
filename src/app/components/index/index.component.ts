@@ -87,6 +87,13 @@ export class IndexComponent implements OnInit {
         this.filter = data.filtered
       })    
     }
+
+    if (this.hubService.reloadDataSubs == undefined) {    
+      this.hubService.reloadDataSubs = this.hubService.    
+      reloadDataEmitter.subscribe((data) => {
+        this.initData()
+      })    
+    }
   }
   
   private receiveData(akun: Akun[], trx: Trx[]) {

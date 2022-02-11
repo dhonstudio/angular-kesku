@@ -26,7 +26,7 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef> Action </th>
         <td mat-cell *matCellDef="let element; index as i">
-          <button mat-mini-fab color="primary" aria-label="Edit" class="mr-2">
+          <button (click)="editAccount(element)" mat-mini-fab color="primary" aria-label="Edit" class="mr-2">
             <mat-icon>edit</mat-icon>
           </button>
           <button *ngIf="element.deleteable" mat-mini-fab color="warn" (click)="deleteAccount(i, element)" aria-label="Delete">

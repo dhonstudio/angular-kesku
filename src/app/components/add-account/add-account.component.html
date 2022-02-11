@@ -14,7 +14,7 @@
 
 		<mat-form-field>
 			<mat-label>Account Type</mat-label>
-			<mat-select formControlName="akunType" required>
+			<mat-select formControlName="akunType" required (selectionChange)="initPosition($event)">
 			  <mat-option value="1">Cash</mat-option>
 			  <mat-option value="2">Bank</mat-option>
 			  <mat-option value="3">Fintech</mat-option>
@@ -24,6 +24,15 @@
 			  <mat-option value="7">Receiveable</mat-option>
 			  <mat-option value="8">Payable</mat-option>
 			  <mat-option value="9">Saving</mat-option>
+			</mat-select>
+			<mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Dashboard Position</mat-label>
+			<mat-select formControlName="position" required>
+				<mat-option value="1">1</mat-option>
+			  <mat-option *ngFor="let position of positions" value="{{ position }}">{{ position }}</mat-option>
 			</mat-select>
 			<mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
 		</mat-form-field>

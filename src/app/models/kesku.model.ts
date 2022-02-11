@@ -10,6 +10,7 @@ export interface Akun {
     akunName: string;
     akunType: number;
     akunTypeName: string;
+    position: number;
     stamp: number;
     total: number;
     deleteable?: boolean;

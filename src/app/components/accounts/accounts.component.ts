@@ -72,15 +72,25 @@ export class AccountsComponent implements OnInit, OnChanges {
   private addAccount() {
     this.showaddAccountDialog().subscribe(data => {
       if (data) {
+        delete(data.id_akun)
         this.sendApiAddAccount(data)
       }
     })
   }
 
-  private showaddAccountDialog() {
+  editAccount(akun: Akun) {
+    this.showaddAccountDialog(akun).subscribe(data => {
+      if (data) {
+        this.sendApiAddAccount(data)
+      }
+    })
+  }
+
+  private showaddAccountDialog(akun?: Akun) {
     const DialogRef = this.matDialog.open(AddAccountComponent, {
       data: {
-        akuns: this.akuns
+        akuns: this.akuns,
+        akun: akun
       }
     })
 
@@ -89,17 +99,24 @@ export class AccountsComponent implements OnInit, OnChanges {
 
   private sendApiAddAccount(akun: Akun) {
     akun.id_book = this.data.userId
-    this.keskuService.checkAccountName(akun).then(ok => {
-      if (ok) {
-        this.keskuService.addAccount(akun).then(data => {
-          this.addRow(this.akuns.length, data)
-          this.globalService.showSnackBar('Success', 3000)
-        })
-      } else {
-        this.globalService.showSnackBar('Failed, account duplicate', 3000)
-      }
-      this.changeTab.emit(3)
-    })
+    if (akun.id_akun) {
+      this.keskuService.addAccount(akun).then(data => {
+        this.editRow(data)
+        this.globalService.showSnackBar('Success', 3000)
+      })
+    } else {
+      this.keskuService.checkAccountName(akun).then(ok => {
+        if (ok) {
+          this.keskuService.addAccount(akun).then(data => {
+            this.addRow(this.akuns.length, data)
+            this.globalService.showSnackBar('Success', 3000)
+          })
+        } else {
+          this.globalService.showSnackBar('Failed, account duplicate', 3000)
+        }
+        this.changeTab.emit(3)
+      })
+    }
   }
 
   private addRow(index: number, akun: Akun) {
@@ -107,7 +124,22 @@ export class AccountsComponent implements OnInit, OnChanges {
     this.akuns.splice(index, 0, akun)
     this.table.renderRows()
     this.initializeDataSource()
-    this.hubService.sendData(this.akuns, this.trxs)
+    this.hubService.reloadData()
+  }
+
+  private editRow(akun: Akun) {
+    akun.akunTypeName = this.initAkunTypeName(akun)
+    this.akuns = this.akuns.filter((value)=>{
+      if (value.id_akun == akun.id_akun){
+        value.stamp = value.stamp
+        value.akunName = akun.akunName
+        value.akunTypeName = akun.akunTypeName
+        value.position = akun.position
+      }
+      return true
+    })
+    this.initializeDataSource()
+    this.hubService.reloadData()
   }
 
   async deleteAccount(index: number, akun: Akun) {

@@ -22,7 +22,7 @@ export class KeskuService {
   ) { }
 
   async initAccounts(id_book: number): Promise<Akun[]> {
-    let get = `id_book=${id_book}`
+    let get = `id_book=${id_book}&sort_by=position&sort_method=ASC`
     return (await firstValueFrom(this.httpClient.get<any>(`${this.globalService.apiUrl}/${this.db}/${this.accountTable}?${get}`, this.globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data
   }
 
