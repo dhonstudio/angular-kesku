@@ -15,6 +15,7 @@ export class AddTransactionComponent implements OnInit {
   akunNames!: string[]
   akunMinusOutcomes!: string[]
   notes!: string[]
+  id_trx = new FormControl()
   akunName = new FormControl()
   method = new FormControl()
   amount = new FormControl()
@@ -46,6 +47,21 @@ export class AddTransactionComponent implements OnInit {
       })
       this.initAutoComplete()
     }
+    if (data.trx) {
+      this.id_trx.setValue(data.trx.id_trx)
+      this.akunName.setValue(data.trx.akunName)
+      if (data.trx.amount < 0) {
+        this.method.setValue('2')
+        this.amount.setValue(`${-data.trx.amount}`)
+      } else {
+        this.method.setValue('1')
+        this.amount.setValue(`${data.trx.amount}`)
+      }
+      this.toName.setValue(data.trx.toName)
+      this.note.setValue(data.trx.note)
+    } else {
+      this.id_trx.setValue(`0`)
+    }
   }  
 
   ngOnInit(): void {
@@ -53,6 +69,7 @@ export class AddTransactionComponent implements OnInit {
 
   private createForm() {
     this.formGroup = this.formBuilder.group({
+      id_trx: this.id_trx,
       akunName: this.akunName,
       method: this.method,
       amount: this.amount,

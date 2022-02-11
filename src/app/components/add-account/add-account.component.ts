@@ -33,9 +33,9 @@ export class AddAccountComponent implements OnInit {
       this.initPosition(event)
       this.position.setValue(`${data.akun.position}`)
       this.akunNames = []
-      data.akuns.forEach((element: { akunName: string; }) => {
+      data.akuns.forEach((element: { akunName: string }) => {
         if (element.akunName != data.akun.akunName) this.akunNames.push(element.akunName)
-      });
+      })
     } else {
       this.id_akun.setValue(`0`)
       this.akunNames = data.akuns.map((x: { akunName: string }) => x.akunName)
@@ -56,7 +56,7 @@ export class AddAccountComponent implements OnInit {
 
   initPosition(event: any) {
     let akunType = parseInt(event.value)
-    let matchAkunType: Akun[] = this.data.akuns.filter((x: { akunType: any; }) => x.akunType == akunType)
+    let matchAkunType: Akun[] = this.data.akuns.filter((x: { akunType: any }) => x.akunType == akunType)
     this.positions = []
     matchAkunType.forEach((element, key) => {
       if (akunType != 5 && akunType != 6) this.positions.push(key+2)

@@ -102,18 +102,28 @@ export class TransactionsComponent implements OnInit, OnChanges {
     this.showaddTransactionDialog().subscribe(data => {
       if (data) {
         data.id_book = this.data.userId
+        delete(data.id_trx)
         this.sendApiAddTransaction(this.sanitizeResult(data))
       }
     })
   }
 
-  private showaddTransactionDialog() {
+  editTransaction(trx: Trx) {
+    this.showaddTransactionDialog(trx).subscribe(data => {
+      if (data) {
+        this.sendApiAddTransaction(this.sanitizeResult(data))
+      }
+    })
+  }
+
+  private showaddTransactionDialog(trx?: Trx) {
     if (this.filtered == 'filter') this.filtered = ''
     const DialogRef = this.matDialog.open(AddTransactionComponent, {
       data: {
         akuns: this.akuns,
         trxs: this.trxs,
-        akunName: this.filtered
+        akunName: this.filtered,
+        trx: trx
       }
     })
 
@@ -149,7 +159,11 @@ export class TransactionsComponent implements OnInit, OnChanges {
 
   private sendApiAddTransaction(trx: Trx) {
     this.keskuService.addTransaction(trx).then(data => {
-      this.addRow(this.akuns.length, data)
+      if (trx.id_trx) {
+        this.editRow(data)
+      } else {
+        this.addRow(this.akuns.length, data)
+      }
       this.globalService.showSnackBar('Success', 3000)
     })
     this.changeTab.emit(1)
@@ -165,6 +179,21 @@ export class TransactionsComponent implements OnInit, OnChanges {
     if (this.trxs.length > 1) this.table.renderRows()
     this.initializeDataSource()
     this.hubService.sendData(this.akuns, this.trxs, this.filtered)
+  }
+
+  private editRow(trx: Trx) {
+    this.trxs = this.trxs.filter((value)=>{
+      if (value.id_trx === trx.id_trx){
+        value.stamp = value.stamp
+        value.akunName = trx.akunName
+        value.toName = trx.toName
+        if (trx.kredit > 0) value.amount = -trx.kredit
+        else value.amount = trx.debit
+      }
+      return true
+    })
+    this.initializeDataSource()
+    this.hubService.reloadData()
   }
 
   async deleteTransaction(trx: Trx) {
