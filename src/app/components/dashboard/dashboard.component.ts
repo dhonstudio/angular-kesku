@@ -87,8 +87,8 @@ export class DashboardComponent implements OnInit, OnChanges {
       })
 
       let outcomeSort = this.akuns
-      outcomeSort.sort((a,b) => b.total.toString().localeCompare(a.total.toString()))
-      let outcomeTypes = this.akuns.map(x => x.akunType)
+      outcomeSort.sort((a,b) => b.total - a.total)
+      let outcomeTypes = outcomeSort.map(x => x.akunType)
       outcomeTypes.forEach((element, key) => {
         if (element == 5) this.outcomes.push(this.akuns[key])
         if (element == 6) this.incomes.push(this.akuns[key])
