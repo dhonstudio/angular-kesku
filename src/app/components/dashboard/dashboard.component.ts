@@ -76,22 +76,26 @@ export class DashboardComponent implements OnInit, OnChanges {
 
       let akunTypes = this.akuns.map(x => x.akunType)
       akunTypes.forEach((element, key) => {
-        if (element == 1) this.cash.push(this.akuns[key])
-        if (element == 2) this.banks.push(this.akuns[key])
-        if (element == 3) this.fintechs.push(this.akuns[key])
-        if (element == 4) this.emoneys.push(this.akuns[key])
-        
-        if (element == 7) this.receiveables.push(this.akuns[key])
-        if (element == 8) this.payables.push(this.akuns[key])
-        if (element == 9) this.savings.push(this.akuns[key])
+        if (this.akuns[key].total > 0) {
+          if (element == 1) this.cash.push(this.akuns[key])
+          if (element == 2) this.banks.push(this.akuns[key])
+          if (element == 3) this.fintechs.push(this.akuns[key])
+          if (element == 4) this.emoneys.push(this.akuns[key])
+          
+          if (element == 7) this.receiveables.push(this.akuns[key])
+          if (element == 8) this.payables.push(this.akuns[key])
+          if (element == 9) this.savings.push(this.akuns[key])
+        }
       })
 
       let outcomeSort = this.akuns
       outcomeSort.sort((a,b) => b.total - a.total)
       let outcomeTypes = outcomeSort.map(x => x.akunType)
       outcomeTypes.forEach((element, key) => {
-        if (element == 5) this.outcomes.push(this.akuns[key])
-        if (element == 6) this.incomes.push(this.akuns[key])
+        if (this.akuns[key].total > 0) {
+          if (element == 5) this.outcomes.push(this.akuns[key])
+          if (element == 6) this.incomes.push(this.akuns[key])
+        }
       })
 
       this.totalCash = this.cash.map(t => t.total).reduce((acc, value) => acc + value, 0)

@@ -111,6 +111,7 @@ export class TransactionsComponent implements OnInit, OnChanges {
   editTransaction(trx: Trx) {
     this.showaddTransactionDialog(trx).subscribe(data => {
       if (data) {
+        data.id_book = this.data.userId
         this.sendApiAddTransaction(this.sanitizeResult(data))
       }
     })
@@ -176,9 +177,9 @@ export class TransactionsComponent implements OnInit, OnChanges {
     trx.toName = this.initAkunName(trx, 'to_akun')
 
     this.trxs.splice(index, 0, trx)
-    if (this.trxs.length > 1) this.table.renderRows()
+    this.table.renderRows()
     this.initializeDataSource()
-    this.hubService.sendData(this.akuns, this.trxs, this.filtered)
+    this.hubService.reloadData()
   }
 
   private editRow(trx: Trx) {
