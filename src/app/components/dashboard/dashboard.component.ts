@@ -118,8 +118,8 @@ export class DashboardComponent implements OnInit, OnChanges {
     }
   }
 
-  showTotalAsset() {
-    this.hideTotalAsset = false
+  showTotalAsset(active:boolean = false) {
+    this.hideTotalAsset = active
   }
 
   showTransactions(akunName: string) {

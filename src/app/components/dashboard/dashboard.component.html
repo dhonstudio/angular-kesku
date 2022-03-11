@@ -5,7 +5,7 @@
       <b>Total Assets </b>
       <b *ngIf="hideTotalAsset">**** <mat-icon (click)="showTotalAsset()" class="cursor-pointer">remove_red_eye</mat-icon></b>
       <b *ngIf="!hideTotalAsset">
-        {{totalAsset | currency:'IDR '}}
+        {{totalAsset | currency:'IDR '}} <mat-icon (click)="showTotalAsset(true)" class="cursor-pointer">remove_red_eye</mat-icon>
       </b>
     </h1>
     
