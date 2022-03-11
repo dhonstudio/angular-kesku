@@ -137,7 +137,7 @@ export class TransactionsComponent implements OnInit, OnChanges {
         data['id_akun'] = this.akuns.find(x => x.akunName == data['akunName'] && x.id_book == data['id_book'])?.id_akun
       } else if (element == 'toName') {
         if (Object.values(data)[key] == '' || Object.values(data)[key] === null) {
-          data[element] = 0
+          data['to_akun'] = 0
         } else {
           data['to_akun'] = this.akuns.find(x => x.akunName == data['toName'] && x.id_book == data['id_book'])?.id_akun
         }        

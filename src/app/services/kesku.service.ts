@@ -57,6 +57,7 @@ export class KeskuService {
       }
     })
     const post = result.join('&')
+    console.log(post)
     return (await firstValueFrom(this.httpClient.post<any>(`${this.globalService.apiUrl}/${this.db}/${this.trxTable}`, post, this.globalService.setHttpOptions({username:this.auth.username, password: this.auth.password})))).data
   }
 
@@ -79,6 +80,12 @@ export class KeskuService {
       else if (element.akunType == 8)
       element.total = 
         trx.filter(x => x.to_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)
+        -trx.filter(x => x.to_akun == element.id_akun).map(t => t.kredit).reduce((acc, value) => acc + value, 0)
+      else if (element.akunType == 9)
+      element.total = 
+        trx.filter(x => x.id_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)
+        +trx.filter(x => x.to_akun == element.id_akun).map(t => t.debit).reduce((acc, value) => acc + value, 0)
+        -trx.filter(x => x.id_akun == element.id_akun).map(t => t.kredit).reduce((acc, value) => acc + value, 0)
         -trx.filter(x => x.to_akun == element.id_akun).map(t => t.kredit).reduce((acc, value) => acc + value, 0)
       else
       element.total = 
